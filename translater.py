@@ -2,6 +2,7 @@ import googletrans
 from googletrans import Translator
 import ctypes
 from ctypes import c_long, c_wchar_p, c_ulong, c_void_p
+import tkinter as tk
 
 translator = Translator(service_urls=['translate.googleapis.com'])
 
@@ -11,6 +12,35 @@ def google_translate(word, metin_dil, cev_dil):
     translated = translator.translate(word, src=metin_dil, dest=cev_dil).text
     return translated
    
+
+window = tk.Tk()
+
+window.resizable(False, False)
+window.title("Translator")
+window.geometry("500x500")
+window.columnconfigure(0, weight = 1)
+window.columnconfigure(1, weight = 2)
+
+####### listbox for text language ########
+list_items = tk.StringVar(value = list(googletrans.LANGUAGES.values()))
+label_textLANG = tk.Label(window, text = "metnin dilini seçiniz:")
+label_textLANG.grid(column = 0, row = 0)
+listbox_textLANG = tk.Listbox(window, listvariable = list_items, height = 6, selectmode = "browse")
+listbox_textLANG.grid(column = 0, row = 2, sticky = "nwes")
+
+
+def chooseONE():
+    selected_indices = listbox_textLANG.curselection()
+    selectedLang = listbox_textLANG.get(selected_indices)
+    label_LANG1.config(text = selectedLang)
+
+###### button for text lang ######
+button_textLANG = tk.Button(window, text = "seç", command = chooseONE)
+button_textLANG.grid(column = 1, row = 0)
+label_LANG1 = tk.Label(window, text = "")
+label_LANG1.grid(column = 0, row = 3)
+window.mainloop()
+"""
 ############   cod of cursor position   ###############
 
 #==== GLOBAL VARIABLES ======================
@@ -19,13 +49,13 @@ gHandle = ctypes.windll.kernel32.GetStdHandle(c_long(-11))
 
 
 def move (y, x):
-   """Move cursor to position indicated by x and y."""
+   # Move cursor to position indicated by x and y.
    value = x + (y << 16)
    ctypes.windll.kernel32.SetConsoleCursorPosition(gHandle, c_ulong(value))
 
 
 def addstr (string):
-   """Write string"""
+   # Write string
    ctypes.windll.kernel32.WriteConsoleW(gHandle, c_wchar_p(string), c_ulong(len(string)), c_void_p(), None)
 
 # move(0,0)
@@ -93,6 +123,4 @@ while True:
     except TypeError:
         move(0, 0)
 
-
-
-
+"""
