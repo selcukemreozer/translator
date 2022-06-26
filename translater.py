@@ -1,19 +1,21 @@
 import googletrans
 from googletrans import Translator
-import ctypes
-from ctypes import c_long, c_wchar_p, c_ulong, c_void_p
+# import ctypes
+# from ctypes import c_long, c_wchar_p, c_ulong, c_void_p
 import tkinter as tk
+from tkinter.scrolledtext import *
+from tkinter import *
 
 translator = Translator(service_urls=['translate.googleapis.com'])
 
-def google_translate(word, metin_dil, cev_dil):
+def google_translate(metin, metin_dil, cev_dil):
     translator = Translator()
     translator.raise_Exception = True
-    translated = translator.translate(word, src=metin_dil, dest=cev_dil).text
+    translated = translator.translate(metin, src=metin_dil, dest=cev_dil).text
     return translated
    
 
-window = tk.Tk()
+window = Tk()
 
 window.resizable(False, False)
 window.title("Translator")
@@ -22,22 +24,31 @@ window.columnconfigure(0, weight = 1)
 window.columnconfigure(1, weight = 2)
 
 ####### listbox for text language ########
-list_items = tk.StringVar(value = list(googletrans.LANGUAGES.values()))
-label_textLANG = tk.Label(window, text = "metnin dilini seçiniz:")
+list_items = StringVar(value = list(googletrans.LANGUAGES.values()))
+label_textLANG = Label(window, text = "metnin dilini seçiniz")
 label_textLANG.grid(column = 0, row = 0)
-listbox_textLANG = tk.Listbox(window, listvariable = list_items, height = 6, selectmode = "extended")
+listbox_textLANG = Listbox(window, listvariable = list_items, height = 6, selectmode = "browse", exportselection=0)
 listbox_textLANG.grid(column = 0, row = 1, sticky = "nwes", padx = 5, pady = 5)
 
 
 
 ###### listbox for trasnlate language #######
-label_translateLANG = tk.Label(window, text = "metnin çevrileceği dili seçin:")
+label_translateLANG = Label(window, text = "metnin çevrileceği dili seçin")
 label_translateLANG.grid(column = 1, row = 0)
-listbox_translateLANG = tk.Listbox(window, listvariable = list_items, height = 6, selectmode = "browse") # browse > tekli seçim, extended > çoklu seçim
+listbox_translateLANG = Listbox(window, listvariable = list_items, height = 6, selectmode = "browse", exportselection=0) # browse > tekli seçim, extended > çoklu seçim
 listbox_translateLANG.grid(column = 1, row = 1, sticky = "nwes", padx = 5, pady = 5)
 
+# textbox
+metinKutusuEtiketi = Label(window, text = "Metni girin")
+metinKutusuEtiketi.grid(column = 0, row = 2)
+metinKutusuEtiketi2 = Label(window, text = "Sonuç")
+metinKutusuEtiketi2.grid(column = 1, row = 2)
+textBox = ScrolledText(window, width = 20, height = 10)
+textBox.grid(column = 0, row = 3)
+outputBox = ScrolledText(window, width = 20, height = 10)
+outputBox.grid(column = 1, row = 3)
 
-# a function
+# function of translate button
 def chooseONE():
     selected_indices = listbox_textLANG.curselection() # for text lang listbox
     selectedLang = listbox_textLANG.get(selected_indices)
@@ -45,26 +56,28 @@ def chooseONE():
     selected_indicesTrans = listbox_translateLANG.curselection() # for translate lang text box
     selectedLangTranslate = listbox_translateLANG.get(selected_indicesTrans)
 
-    label_LANG1.config(text = selectedLang)
+
 
     lang_values = list(googletrans.LANGUAGES.values())
 
     for each in range(len(lang_values)):
         if selectedLang == lang_values[each]:
             metinDili = list(googletrans.LANGUAGES.keys())[each]
-            print(metinDili)
+
 
         if selectedLangTranslate == lang_values[each]:
             ceviriDili = list(googletrans.LANGUAGES.keys())[each]
-            print(ceviriDili)
+
+    # label_LANG1.config(text=google_translate())
+    print(textBox.get(1.0,"end"))
+    outputBox.delete(1.0, "end")
+    outputBox.insert(END, google_translate(textBox.get(1.0,"end"), metinDili, ceviriDili))
 
 
 ###### button for text lang ######
 
-button_textLANG = tk.Button(window, text = "çevir", command = chooseONE)
-button_textLANG.grid(column = 1, row = 2)
-label_LANG1 = tk.Label(window, text = "")
-label_LANG1.grid(column = 0, row = 3)
+button_textLANG = Button(window, text = "çevir", command = chooseONE)
+button_textLANG.grid(column = 1, row = 4)
 window.mainloop()
 """
 ############   cod of cursor position   ###############
