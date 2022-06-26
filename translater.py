@@ -2,7 +2,6 @@ import googletrans
 from googletrans import Translator
 # import ctypes
 # from ctypes import c_long, c_wchar_p, c_ulong, c_void_p
-import tkinter as tk
 from tkinter.scrolledtext import *
 from tkinter import *
 
