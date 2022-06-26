@@ -69,7 +69,6 @@ def chooseONE():
             ceviriDili = list(googletrans.LANGUAGES.keys())[each]
 
     # label_LANG1.config(text=google_translate())
-    print(textBox.get(1.0,"end"))
     outputBox.delete(1.0, "end")
     outputBox.insert(END, google_translate(textBox.get(1.0,"end"), metinDili, ceviriDili))
 
