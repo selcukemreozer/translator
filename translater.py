@@ -25,18 +25,44 @@ window.columnconfigure(1, weight = 2)
 list_items = tk.StringVar(value = list(googletrans.LANGUAGES.values()))
 label_textLANG = tk.Label(window, text = "metnin dilini seçiniz:")
 label_textLANG.grid(column = 0, row = 0)
-listbox_textLANG = tk.Listbox(window, listvariable = list_items, height = 6, selectmode = "browse")
-listbox_textLANG.grid(column = 0, row = 2, sticky = "nwes")
+listbox_textLANG = tk.Listbox(window, listvariable = list_items, height = 6, selectmode = "extended")
+listbox_textLANG.grid(column = 0, row = 1, sticky = "nwes", padx = 5, pady = 5)
 
 
+
+###### listbox for trasnlate language #######
+label_translateLANG = tk.Label(window, text = "metnin çevrileceği dili seçin:")
+label_translateLANG.grid(column = 1, row = 0)
+listbox_translateLANG = tk.Listbox(window, listvariable = list_items, height = 6, selectmode = "browse") # browse > tekli seçim, extended > çoklu seçim
+listbox_translateLANG.grid(column = 1, row = 1, sticky = "nwes", padx = 5, pady = 5)
+
+
+# a function
 def chooseONE():
-    selected_indices = listbox_textLANG.curselection()
+    selected_indices = listbox_textLANG.curselection() # for text lang listbox
     selectedLang = listbox_textLANG.get(selected_indices)
+
+    selected_indicesTrans = listbox_translateLANG.curselection() # for translate lang text box
+    selectedLangTranslate = listbox_translateLANG.get(selected_indicesTrans)
+
     label_LANG1.config(text = selectedLang)
 
+    lang_values = list(googletrans.LANGUAGES.values())
+
+    for each in range(len(lang_values)):
+        if selectedLang == lang_values[each]:
+            metinDili = list(googletrans.LANGUAGES.keys())[each]
+            print(metinDili)
+
+        if selectedLangTranslate == lang_values[each]:
+            ceviriDili = list(googletrans.LANGUAGES.keys())[each]
+            print(ceviriDili)
+
+
 ###### button for text lang ######
-button_textLANG = tk.Button(window, text = "seç", command = chooseONE)
-button_textLANG.grid(column = 1, row = 0)
+
+button_textLANG = tk.Button(window, text = "çevir", command = chooseONE)
+button_textLANG.grid(column = 1, row = 2)
 label_LANG1 = tk.Label(window, text = "")
 label_LANG1.grid(column = 0, row = 3)
 window.mainloop()
