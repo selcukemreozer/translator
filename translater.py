@@ -1,3 +1,5 @@
+from tkinter import messagebox
+
 import googletrans
 from googletrans import Translator
 # import ctypes
@@ -12,7 +14,6 @@ def google_translate(metin, metin_dil, cev_dil):
     translator.raise_Exception = True
     translated = translator.translate(metin, src=metin_dil, dest=cev_dil).text
     return translated
-   
 
 window = Tk()
 
@@ -28,8 +29,6 @@ label_textLANG = Label(window, text = "metnin dilini seçiniz")
 label_textLANG.grid(column = 0, row = 0)
 listbox_textLANG = Listbox(window, listvariable = list_items, height = 6, selectmode = "browse", exportselection=0)
 listbox_textLANG.grid(column = 0, row = 1, sticky = "nwes", padx = 5, pady = 5)
-
-
 
 ###### listbox for trasnlate language #######
 label_translateLANG = Label(window, text = "metnin çevrileceği dili seçin")
@@ -49,34 +48,38 @@ outputBox.grid(column = 1, row = 3)
 
 # function of translate button
 def chooseONE():
-    selected_indices = listbox_textLANG.curselection() # for text lang listbox
-    selectedLang = listbox_textLANG.get(selected_indices)
+    try:
+        selected_indices = listbox_textLANG.curselection() # for text lang listbox
+        selectedLang = listbox_textLANG.get(selected_indices)
 
-    selected_indicesTrans = listbox_translateLANG.curselection() # for translate lang text box
-    selectedLangTranslate = listbox_translateLANG.get(selected_indicesTrans)
+        selected_indicesTrans = listbox_translateLANG.curselection() # for translate lang text box
+        selectedLangTranslate = listbox_translateLANG.get(selected_indicesTrans)
+
+        lang_values = list(googletrans.LANGUAGES.values())
+
+        for each in range(len(lang_values)):
+            if selectedLang == lang_values[each]:
+                metinDili = list(googletrans.LANGUAGES.keys())[each]
 
 
+            if selectedLangTranslate == lang_values[each]:
+                ceviriDili = list(googletrans.LANGUAGES.keys())[each]
 
-    lang_values = list(googletrans.LANGUAGES.values())
+    except:
+        messagebox.showerror(title="Uyarı!", message="lütfen dil seçiniz!")
 
-    for each in range(len(lang_values)):
-        if selectedLang == lang_values[each]:
-            metinDili = list(googletrans.LANGUAGES.keys())[each]
+    try:
+        outputBox.delete(1.0, "end")
+        outputBox.insert(END, google_translate(textBox.get(1.0,"end"), metinDili, ceviriDili))
 
-
-        if selectedLangTranslate == lang_values[each]:
-            ceviriDili = list(googletrans.LANGUAGES.keys())[each]
-
-    # label_LANG1.config(text=google_translate())
-    outputBox.delete(1.0, "end")
-    outputBox.insert(END, google_translate(textBox.get(1.0,"end"), metinDili, ceviriDili))
-
+    except:
+        messagebox.showerror(title="Uyarı!", message="lütfen mtin kutusunu boş bırakmayın!")
 
 ###### button for text lang ######
-
 button_textLANG = Button(window, text = "çevir", command = chooseONE)
 button_textLANG.grid(column = 1, row = 4)
 window.mainloop()
+
 """
 ############   cod of cursor position   ###############
 
