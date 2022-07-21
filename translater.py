@@ -1,5 +1,4 @@
-from tkinter import messagebox
-
+# from tkinter import messagebox
 import googletrans
 from googletrans import Translator
 # import ctypes
@@ -37,6 +36,8 @@ listbox_translateLANG = Listbox(window, listvariable = list_items, height = 6, s
 listbox_translateLANG.grid(column = 1, row = 1, sticky = "nwes", padx = 5, pady = 5)
 
 # textbox
+uyariEtiketi = Label(window, text="")
+uyariEtiketi.grid(column=0, row=4)
 metinKutusuEtiketi = Label(window, text = "Metni girin")
 metinKutusuEtiketi.grid(column = 0, row = 2)
 metinKutusuEtiketi2 = Label(window, text = "Sonuç")
@@ -56,6 +57,7 @@ def chooseONE():
         selectedLangTranslate = listbox_translateLANG.get(selected_indicesTrans)
 
         lang_values = list(googletrans.LANGUAGES.values())
+        uyariEtiketi.config(text="")
 
         for each in range(len(lang_values)):
             if selectedLang == lang_values[each]:
@@ -65,21 +67,26 @@ def chooseONE():
             if selectedLangTranslate == lang_values[each]:
                 ceviriDili = list(googletrans.LANGUAGES.keys())[each]
 
-    except:
-        messagebox.showerror(title="Uyarı!", message="lütfen dil seçiniz!")
+    except TclError:
+        uyariEtiketi.config(text="Lütfen Dil Seçiniz")
+        # messagebox.showerror(title="Uyarı!", message="lütfen dil seçiniz!")
 
     try:
         outputBox.delete(1.0, "end")
         outputBox.insert(END, google_translate(textBox.get(1.0,"end"), metinDili, ceviriDili))
 
     except:
-        messagebox.showerror(title="Uyarı!", message="lütfen mtin kutusunu boş bırakmayın!")
+        # messagebox.showerror(title="Uyarı!", message="lütfen mtin kutusunu boş bırakmayın!")
+        pass
+
+    window.after(2000, chooseONE)
 
 ###### button for text lang ######
 button_textLANG = Button(window, text = "çevir", command = chooseONE)
 button_textLANG.grid(column = 1, row = 4)
-textBox.bind('<Return>', chooseONE)
-window.after(1000, chooseONE)
+# textBox.bind("<Return>", chooseONE)
+window.after(2000, chooseONE)
+
 window.mainloop()
 
 """
