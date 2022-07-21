@@ -78,6 +78,8 @@ def chooseONE():
 ###### button for text lang ######
 button_textLANG = Button(window, text = "çevir", command = chooseONE)
 button_textLANG.grid(column = 1, row = 4)
+textBox.bind('<Return>', chooseONE)
+window.after(1000, chooseONE)
 window.mainloop()
 
 """
